@@ -1,4 +1,4 @@
-
+const dotenv = require('dotenv');
 const express = require('express');
 
 const app = express();
@@ -7,7 +7,8 @@ const {Translate} = require('@google-cloud/translate').v2;
 require('dotenv').config();
 
 // Your credentials
-const CREDENTIALS = require("../optical-metric-411818-b3e4d1c73897.json")
+const CREDENTIALS = JSON.parse(process.env.REACT_APP_CREDENTIALS);
+
 const io = require('socket.io')(server,{
     cors:{
         origin:"http://localhost:3000",
@@ -66,8 +67,6 @@ const translateText = async (text, targetLanguage) => {
         return 0;
     }
 };
-
-
 
 io.on("connection", (socket) => {
     console.log("connected");
