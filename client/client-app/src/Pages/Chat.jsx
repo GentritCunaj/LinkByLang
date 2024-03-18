@@ -51,7 +51,7 @@ export default function Chat(){
         };
     
         try {
-            const response = await fetch('http://localhost:3001/api/translate', requestOptions);
+            const response = await fetch('https://langsocket.onrender.com/api/translate', requestOptions);
             if (!response.ok) {
                 throw new Error('Failed to fetch translation');
             }

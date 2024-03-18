@@ -21,7 +21,7 @@ const CREDENTIALS = JSON.parse(process.env.REACT_APP_CREDENTIALS);
 
 const io = require('socket.io')(server,{
     cors:{
-        origin: '*',
+        origin: process.env.REACT_APP_ORIGIN,
         methods:["GET","POST"]
     }
 })
