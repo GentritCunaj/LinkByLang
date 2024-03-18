@@ -40,7 +40,7 @@ export default function Chat(){
         const newShowTranslated = [...showTranslated];
         newShowTranslated[index] = !newShowTranslated[index];
         setShowTranslated(newShowTranslated);
-        console.log("toggled");
+        
     };
     
     async function translateText(textToTranslate, targetLanguage) {
@@ -56,7 +56,7 @@ export default function Chat(){
                 throw new Error('Failed to fetch translation');
             }
             const data = await response.json();
-            console.log(data, 'okay');
+           
             return data;
         } catch (error) {
             console.error('Translation error:', error);
@@ -99,8 +99,7 @@ export default function Chat(){
             // Emit privateMessage event after 5 seconds
             socket.emit('privateMessage', id);
         }, 5000);
-    
-        // Clean up function to clear the timer when component unmounts or when the socket changes
+
         return () => clearTimeout(timer);
     }, [socket]);
 
@@ -108,14 +107,13 @@ export default function Chat(){
     useEffect(() => {
         const joinPrivateRoom = ({generated,mutual,otherId}) => {
           
-            // Emit a 'join-private-room' event with the private room ID
-
+    
             socket.emit('join-private-room', {roomId:generated,id});
           
-            // setRecipient(rec);
-            console.log(generated,mutual,otherId)
+       
+          
             setMutual(mutual);
-            setPrivateRoom(generated); // Update the state with the private room ID
+            setPrivateRoom(generated); 
             setOther(otherId);
             setIsLoading(false);
         };
@@ -155,11 +153,6 @@ export default function Chat(){
      
     }
 
-
-    useEffect(() => {
-        console.log(allMessagesReceived);
-        console.log("hooked");
-    }, [allMessagesReceived]);
 
     useEffect(()=>{
        
@@ -267,42 +260,7 @@ export default function Chat(){
 ))}
                 </AnimatePresence>
 
-            {/* {allMessagesReceived.map((messageArray, index) => (
-                <div key={index}>
-                    <div class="received-chats">
-                        <div class="received-msg">
-                            <div onClick={() => toggleTranslated(index)} className="circle1">
-                                <img src={require("../Images/translate.png")} alt="Translate" />
-                            </div>
-                            <div class="received-msg-inbox">
-                                <p>
-                                    {showTranslated[index] ? messageArray[0] : messageArray[1]}
-                                </p>
-                                <span class="time">{messageArray[2]}</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            ))}
-              
-             
-              {messagesSent.map((messageArray, index) => (
-                <div key={index}>
-                    <div class="outgoing-chats">
-              
-                <div class="outgoing-msg">
-                  <div class="outgoing-chats-msg">
-                    <p class="multi-msg">
-                      {messageArray[0]}
-                    </p>
-                   
 
-                    <span class="time">{messageArray[1]}</span>
-                  </div>
-                </div>
-              </div>
-                </div>
-            ))} */}
              
             </div >
           </div>

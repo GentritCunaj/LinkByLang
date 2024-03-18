@@ -90,15 +90,14 @@ app.post('/api/translate', async (req, res) => {
 });
 
 io.on("connection", (socket) => {
-    console.log("connected");
-
+   
     socket.emit('freeSectionCounts', Object.fromEntries(
         Object.entries(sectionRooms).map(([section, { free }]) => [section, free.length])
     ));
 
     socket.on("updateName", ({ id, name }) => {
         socketNamesMap.set(id, name);
-        console.log(`Name updated for socket ${id}: ${name}`);
+       
     });
 
     
@@ -108,14 +107,13 @@ io.on("connection", (socket) => {
             sectionRooms[data].free.push(socket.id);
         }
         io.to(data).emit('usersInSection', sectionRooms[data].free);
-        console.log("first room")
+       
     });
 
     socket.on("join-private-room", ({roomId,id}) => {
 
         socket.join(roomId);
-        console.log("okayyy",roomId)
-        console.log(sectionRooms[id].free)
+       
         const index = sectionRooms[id].free.indexOf(socket.id);
         if (index !== -1) {
             sectionRooms[id].free.splice(index, 1);
@@ -130,15 +128,13 @@ io.on("connection", (socket) => {
  
         if (usersInRoom.length < 2) {
             io.emit('privateRoomError', { error: 'Not enough users available for private conversation.' });
-            console.log("not enough");
+            
             return;
         }
         const sortedSockets = sortSocketsByMutualInterests(usersInRoom, socketInterests);
         const mutual = sortedSockets[1]
         const [user1, user2] = sortedSockets[0].slice(0, 2);
-        console.log(user1,"user1");
-        console.log(user2,"user2");
-        console.log(socketNamesMap);
+       
         const user1Name = socketNamesMap.get(user1);
         const user2Name = socketNamesMap.get(user2);
     
@@ -156,7 +152,7 @@ io.on("connection", (socket) => {
 
     socket.on("updateInterests", (interests) => {
         socketInterests.get(socket.id).interests = interests;
-        console.log(`Interests updated for socket ${socket.id}:`, interests);
+       
     });
 
 
@@ -196,7 +192,7 @@ io.on("connection", (socket) => {
         let messageUpdated = messageContent;
         translateText(messageUpdated,language).then((res)=>{
             messageUpdated += "~" + res + "~" + messageTime;
-            console.log(`Emitting receive_message to room ${privateRoom}:`, messageUpdated);
+        
             socket.to(privateRoom).emit("receive_message", messageUpdated);
             
         })
@@ -228,28 +224,21 @@ function generatePrivateRoom(user1, user2) {
 }
 
 function sortSocketsByMutualInterests(sockets, socketInterestsMap) {
-    // Define the custom sorting criteria
+
     let mutualInterestsA = null;
     function compareByMutualInterests(socketA, socketB) {
-        // Get interests of each socket
+
         const interestsA = socketInterestsMap.get(socketA).interests;
         const interestsB = socketInterestsMap.get(socketB).interests;
-        console.log(interestsA,interestsB);
-   
-
-        // Find the mutual interests between the two sockets
 
         mutualInterestsA = interestsA.filter(interest => interestsB.includes(interest));
         const mutualInterestsB = interestsB.filter(interest => interestsA.includes(interest));
     
-        // Sort the sockets based on the number of mutual interests
-        // Compare the lengths of mutual interests arrays to determine sorting order
-        console.log(mutualInterestsA,"a");
-        console.log(mutualInterestsB,"b");
+     
         return [mutualInterestsB.length - mutualInterestsA.length];
     }
 
-    // Sort the sockets array using the custom sorting function
+
     return [sockets.sort(compareByMutualInterests),mutualInterestsA];
 }
 
