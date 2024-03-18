@@ -11,7 +11,7 @@ const CREDENTIALS = JSON.parse(process.env.REACT_APP_CREDENTIALS);
 console.log("clicked")
 const io = require('socket.io')(server,{
     cors:{
-        origin:"http://localhost:3000",
+        origin:"https://linkbylang.netlify.app/",
         methods:["GET","POST"]
     }
 })
