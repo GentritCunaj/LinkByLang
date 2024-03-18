@@ -232,4 +232,4 @@ function sortSocketsByMutualInterests(sockets, socketInterestsMap) {
     return [sockets.sort(compareByMutualInterests),mutualInterestsA];
 }
 
-server.listen(3001);
+server.listen(process.env.PORT || 3001);
