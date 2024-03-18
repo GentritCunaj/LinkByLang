@@ -1,5 +1,5 @@
 import io from 'socket.io-client';
-
-const socket = io.connect("https://langsocket.onrender.com/");
+const ORIGIN = 'https://linkbylang.netlify.app';
+const socket = io.connect(ORIGIN);
 
 export default socket;

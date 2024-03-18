@@ -1,17 +1,27 @@
 const dotenv = require('dotenv');
 const express = require('express');
-
+const path = require('path');
+const cors = require('cors');
 const app = express();
+app.use(cors());
+app.use(express.json());
+
 const server = require('http').Server(app);
 const {Translate} = require('@google-cloud/translate').v2;
-require('dotenv').config();
+require('dotenv').config({path:'../.env'});
 
-// Your credentials
+
+
+// You
+
+// Define an API endpoint for translation
+
+
 const CREDENTIALS = JSON.parse(process.env.REACT_APP_CREDENTIALS);
-console.log("clicked")
+
 const io = require('socket.io')(server,{
     cors:{
-        origin:"https://linkbylang.netlify.app",
+        origin: '*',
         methods:["GET","POST"]
     }
 })
@@ -67,6 +77,17 @@ const translateText = async (text, targetLanguage) => {
         return 0;
     }
 };
+
+app.post('/api/translate', async (req, res) => {
+    const { text, targetLanguage } = req.body;
+    try {
+        const translatedText = await translateText(text, targetLanguage);
+        res.json({ translatedText });
+    } catch (error) {
+        console.error('Translation error:', error);
+        res.status(500).json({ error: 'Translation failed' });
+    }
+});
 
 io.on("connection", (socket) => {
     console.log("connected");
@@ -232,4 +253,8 @@ function sortSocketsByMutualInterests(sockets, socketInterestsMap) {
     return [sockets.sort(compareByMutualInterests),mutualInterestsA];
 }
 
-server.listen(process.env.PORT || 3001);
+module.exports = {
+    translateText
+};
+
+server.listen(process.env.REACT_APP_PORT || 3001);

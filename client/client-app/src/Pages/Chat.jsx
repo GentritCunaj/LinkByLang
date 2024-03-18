@@ -4,6 +4,7 @@ import socket from "./socket";
 import { useState,useRef } from "react";
 import { useParams } from 'react-router-dom';
 import {AnimatePresence, motion} from 'framer-motion';
+
 export default function Chat(){
     const [privateRoom, setPrivateRoom] = useState(null);
 
@@ -20,13 +21,14 @@ export default function Chat(){
     
     const { id } = useParams();
 
+
     useEffect(() => {
-        // Update id state when the component mounts
+        
         setRoom(id);
     }, [room]);
 
     useEffect(() => {
-        const chatPage = document.querySelector(".msg-page");
+        const chatPage = document.querySelector(".chats");
         if (chatPage) {
             setTimeout(() => {
                 chatPage.scrollTop = chatPage.scrollHeight;
@@ -40,6 +42,55 @@ export default function Chat(){
         setShowTranslated(newShowTranslated);
         console.log("toggled");
     };
+    
+    async function translateText(textToTranslate, targetLanguage) {
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text: textToTranslate, targetLanguage }),
+        };
+    
+        try {
+            const response = await fetch('http://localhost:3001/api/translate', requestOptions);
+            if (!response.ok) {
+                throw new Error('Failed to fetch translation');
+            }
+            const data = await response.json();
+            console.log(data, 'okay');
+            return data;
+        } catch (error) {
+            console.error('Translation error:', error);
+            throw error;
+        }
+    }
+    
+    function lang(lg){
+        switch (lg) {
+        case "german":
+            return "de"
+           
+        case "english":
+           return "en"
+
+        case "serbian":
+            return "hr"
+
+        case "french":
+            return "fr"
+            
+        case "albanian":
+            return "al"
+            
+        case "italian":
+            return "it"
+            
+        case "spanish":
+            return "es"    
+        default:
+            return "en"
+            
+        }
+    }
     
 
     useEffect(() => {
@@ -85,10 +136,22 @@ export default function Chat(){
         const currentTime = `${hours}:${minutes} ${ampm}`;
         const messageWithTime = `${message}~${currentTime}`;
         const splitted = messageWithTime.split("~");
-        const sentMessage = { content: splitted, time: now, type: "sent" };
-    
-        socket.emit("send_message",{message:messageWithTime,privateRoom,room})
-       setMessagesSent([...messagesSent,sentMessage]);
+        const targetLanguage = lang(room);
+
+        translateText(splitted[0], targetLanguage)
+            .then(res => {
+             
+                const sentMessage = { content: [...splitted,res.translatedText], time: now, type: "sent" };
+      
+                socket.emit("send_message",{message:messageWithTime,privateRoom,room})
+               setMessagesSent([...messagesSent,sentMessage]);
+            })
+            .catch(error => {
+               console.log(error)
+            });
+
+       
+       setMessage('');
      
     }
 
@@ -138,7 +201,7 @@ export default function Chat(){
 
 <ul class="interestsul">
     {mutual.length !== 0 && (
-        <h4><span style={{fontSize:'1.2rem',left:"10%",position:"relative"}} class="interestsspan">Things you like in common :)</span></h4>
+        <h4><span  class="interestsspan">Things you like in common :)</span></h4>
     )}    
             {mutual.length !== 0 && mutual.map((m)=>{
               
@@ -161,9 +224,9 @@ export default function Chat(){
    
       <div class="msg-header">
         {other && (
-             <div class="container1"><div class="active">
+             <div class="container1">
             <p class="userP">{other}</p>
-          </div>
+          
         </div>
         )}
        
@@ -180,25 +243,28 @@ export default function Chat(){
              
             <AnimatePresence>
             {sortedMessages.map((message, index) => (
-                    <motion.div initial={{opacity:0,height:0}} transition={{opacity:0.15}} animate={{opacity:1,height:"auto"}} key={index} className={message.type === "sent" ? "outgoing-chats" : "received-chats"}>
-                        <div className={message.type === "sent" ? "outgoing-msg" : "received-msg"}>
-                            {message.type === "sent" ? (
-                                <div className="outgoing-chats-msg">
-                                    <p className="multi-msg">{message.content[0]}</p>
-                                    <span className="time">{message.content[1]}</span>
-                                </div>
-                            ) : (
-                                <div className="received-msg-inbox">
-                                    <div onClick={() => toggleTranslated(index)} className="circle1">
-                                        <img src={require("../Images/translate.png")} alt="Translate" />
-                                    </div>
-                                    <p>{showTranslated[index] ? message.content[0] : message.content[1]}</p>
-                                    <span className="time">{message.content[2]}</span>
-                                </div>
-                            )}
-                        </div>
-                    </motion.div>
-                ))}
+    <motion.div key={index} initial={{opacity:0,height:0}} transition={{opacity:0.15}} animate={{opacity:1,height:"auto"}} className={message.type === "sent" ? "outgoing-chats" : "received-chats"}>
+        <div className={message.type === "sent" ? "outgoing-msg" : "received-msg"}>
+            {message.type === "sent" ? (
+                <div className="outgoing-chats-msg">
+                    <div onClick={() => toggleTranslated(index)} className="circle1">
+                        <img src={require("../Images/translate.png")} alt="Translate" />
+                    </div>
+                    <p className="multi-msg">{showTranslated[index] ? message.content[0] : message.content[2]}</p>
+                    <span className="time">{message.content[1]}</span>
+                </div>
+            ) : (
+                <div className="received-msg-inbox">
+                    <div onClick={() => toggleTranslated(index)} className="circle1">
+                        <img src={require("../Images/translate.png")} alt="Translate" />
+                    </div>
+                    <p>{showTranslated[index] ? message.content[0] : message.content[1]}</p>
+                    <span className="time">{message.content[2]}</span>
+                </div>
+            )}
+        </div>
+    </motion.div>
+))}
                 </AnimatePresence>
 
             {/* {allMessagesReceived.map((messageArray, index) => (
@@ -242,22 +308,25 @@ export default function Chat(){
           </div>
 
          
-          <div class="msg-bottom">
+         
             <div class="input-group">
               <input
                 type="text"
                 id="messageInput"
                 class="form-control"
                 placeholder="Send message..."
-
+               value = {message}
                 onChange={(e)=> setMessage(e.target.value)}
               />
 
               <span id="sendSpan" onClick={sendMessage} class="input-group-text send-icon">
-              <svg style={{height:"auto"}} fill="#000000" width="800px" height="800px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M2.009,10.845a1,1,0,0,0,.849.859l8.258,1.18,1.18,8.258a1,1,0,0,0,1.909.252l7.714-18a1,1,0,0,0-1.313-1.313L2.606,9.8A1,1,0,0,0,2.009,10.845Zm11.762,6.483-.711-4.974,4.976-4.976Zm2.85-11.363-4.974,4.974-4.976-.71Z"/></svg>
+              <svg style={{ 
+    width: '80%',
+    position: 'relative',
+    left: '-20px'}} fill="#000000" width="800px" height="800px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M2.009,10.845a1,1,0,0,0,.849.859l8.258,1.18,1.18,8.258a1,1,0,0,0,1.909.252l7.714-18a1,1,0,0,0-1.313-1.313L2.606,9.8A1,1,0,0,0,2.009,10.845Zm11.762,6.483-.711-4.974,4.976-4.976Zm2.85-11.363-4.974,4.974-4.976-.71Z"/></svg>
               </span>
             </div>
-          </div>
+         
         </div>
       </div>
     </div>

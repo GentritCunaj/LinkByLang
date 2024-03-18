@@ -3,6 +3,8 @@ import socket from "./socket";
 import {useNavigate} from 'react-router-dom';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
+import {ToastContainer,toast} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 function Home() {
     const navigate = useNavigate();
     const [interests, setInterests] = useState([]);
@@ -10,10 +12,28 @@ function Home() {
 	const [name, setName] = useState("");
 	const flags = ['german','english','albanian','french','serbian','italian','spanish']
    
+	const notify = () => toast.info('Please provide your name before proceeding!', {
+		position: "top-right",
+		autoClose: 5000,
+		hideProgressBar: false,
+		closeOnClick: true,
+		pauseOnHover: true,
+		draggable: true,
+		progress: undefined,
+		
+		});;
+
     const joinRoom = (nr) => {
-		socket.emit("updateName", { id: socket.id, name });
-        socket.emit('join-room', nr);
-        navigate(`/chat/${nr}`)
+		if (name === ''){
+			notify();
+		}
+		else {
+			socket.emit("updateName", { id: socket.id, name });
+			socket.emit('join-room', nr);
+			
+			navigate(`/chat/${nr}`)
+		}
+		
        
     }
 
@@ -52,6 +72,7 @@ function Home() {
     return (
         <>
 	 
+	 <ToastContainer />
 		<div class="logoNavbar">
   <div class="logo">
 	<img src={require("../Images/logo-no-background.png")} />
