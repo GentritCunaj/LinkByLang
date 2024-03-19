@@ -37,7 +37,7 @@ npm run DevStart
 
 
 ## Technologies Used
-Frontend: React.js, Socket.io-client, Framer Motio
+Frontend: React.js, Socket.io-client, Framer Motion, Toastify
 
 Backend: Node.js, Express.js, Socket.io, Google Cloud Translate API
 
