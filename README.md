@@ -16,15 +16,25 @@ Dynamic Pairing: Users are paired with others who share the most mutual interest
 Private Conversations: Users can initiate private conversations with other users, providing a more personalized chat experience.
 
 ## To run the LinkByLang application locally, follow these steps:
+### frontend
 git clone https://github.com/GentritCunaj/LinkByLang.git
+
 cd client
+
 npm install
+
 cd client-app
+
 npm start
 
-cd server
-npm run DevStart
 Access the application at http://localhost:3000
+### backend 
+
+cd server
+
+npm run DevStart
+
+
 
 ## Technologies Used
 Frontend: React.js, Socket.io-client, Framer Motio
