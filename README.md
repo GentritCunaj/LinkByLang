@@ -6,9 +6,13 @@ https://linkbylang.netlify.app
 
 ## Features
 Interest Selection: Users can select their interests or hobbies, which are used to match them with like-minded individuals.
+
 Language Sections: Users can join language-specific chat sections, such as German, French, Spanish, etc., based on their language preferences.
+
 Real-time Translation: Messages exchanged between users are automatically translated into the recipient's preferred language.
+
 Dynamic Pairing: Users are paired with others who share the most mutual interests, enhancing the quality of interactions.
+
 Private Conversations: Users can initiate private conversations with other users, providing a more personalized chat experience.
 
 ## To run the LinkByLang application locally, follow these steps:
