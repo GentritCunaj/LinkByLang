@@ -241,10 +241,10 @@ export default function Chat(){
    
       <div class="msg-header">
         {other && (
-             <div class="container1">
+            
             <p class="userP">{other}</p>
           
-        </div>
+       
         )}
 
         
