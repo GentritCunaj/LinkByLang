@@ -386,7 +386,7 @@ border-radius: 25px;
     height: 10%;
     border-bottom: none;
     display: inline-block;
-	width: 30%;
+	width: 50%;
     background: darkslateblue;
     margin: 0;
 
@@ -671,7 +671,7 @@ li:nth-child(3n - 1)::marker {
 		.flags .flag img {
 		position: relative;
 			margin: 0 auto;
-			height: 100%;
+			
 			width: 100%;
 		}
 
@@ -797,9 +797,7 @@ li:nth-child(3n - 1)::marker {
 			top: 100px;
 		}
 
-		.interestsul {
-			height: 100px;
-		}
+		
 
 		.iceP {
 			font-size: 15px !important;
