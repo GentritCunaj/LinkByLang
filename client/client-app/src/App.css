@@ -2,7 +2,7 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&display=swap');
 
-
+@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
 
 body {
 	margin: 0;
@@ -79,6 +79,13 @@ p {
 	& > * {
 		margin: .5rem 0.5rem;
 	}
+}
+
+
+.banners {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
 }
 
 
@@ -468,7 +475,7 @@ li:nth-child(3n - 1)::marker {
 
 .chats {
 	height: 350px;
-    max-height: 350px;
+    max-height: 450px;
     overflow-y: auto;
 	
 }
@@ -754,7 +761,9 @@ li:nth-child(3n - 1)::marker {
 			   font-size: 0.6rem;
 		   }
 		   .chatcontainer {
-			   margin-top:100px;
+			 position: relative;
+			 top:200px;
+			 height: 350px;
 		   }
 
 		   .flag.card .flagButton {
@@ -770,14 +779,104 @@ li:nth-child(3n - 1)::marker {
 		.nameInput::placeholder {
 			text-align: center;
 		}
+
+		.mainDiv {
+			height: 800px;
+		}
 		
+		
+		.banners {
+			flex-direction:column;
+
+		}
 		   
+		.iceDiv {
+			margin: 0 auto;
+			position: relative;
+			top: 100px;
+		}
+
+		.interestsul {
+			height: 100px;
+		}
+
+		.iceP {
+			font-size: 15px !important;
+		}
 		   
 
 
   }
 
+  .iceBackground {
+	position: relative;
+    top: 30px;
+    background: rgb(245, 245, 245);
+    padding: 10px;
+	height: fit-content;
+    padding: 10px;
+	display: inline-block;
+  }
 
+  .iceP   {  color: #f2f2f2;
+    background: #cd5858;
+    font-size: 25px;
+    line-height: 24px;
+
+    margin: 0 5px 24px;
+    float: left;
+    padding: 10px;
+    margin: 0 2px;
+    font-family: 'Libre Baskerville', serif;
+  }
+
+
+  /* CSS */
+  .iceButton {
+	background-color: #e8686d;
+	border: 0 solid #E5E7EB;
+	box-sizing: border-box;
+	color: #000000;
+	display: flex;
+	font-family: ui-sans-serif,system-ui,-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+	font-size: 1rem;
+	font-weight: 700;
+	justify-content: center;
+	line-height: 1.75rem;
+	padding: .75rem 1.65rem;
+	position: relative;
+	text-align: center;
+	text-decoration: none #000000 solid;
+	text-decoration-thickness: auto;
+	width: 100%;
+	max-width: 460px;
+	position: relative;
+	cursor: pointer;
+	transform: rotate(-2deg);
+	user-select: none;
+	-webkit-user-select: none;
+	touch-action: manipulation;
+  }
+  
+  .iceButton:focus {
+	outline: 0;
+  }
+  
+  .iceButton:after {
+	content: '';
+	position: absolute;
+	border: 1px solid #000000;
+	bottom: 4px;
+	left: 4px;
+	width: calc(100% - 1px);
+	height: calc(100% - 1px);
+  }
+  
+  .iceButton:hover:after {
+	bottom: 2px;
+	left: 2px;
+  }
+  
   /* HTML: <div class="loader"></div> */
 .loader {
 	width: 60px;

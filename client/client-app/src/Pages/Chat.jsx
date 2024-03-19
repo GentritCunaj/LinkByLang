@@ -4,12 +4,13 @@ import socket from "./socket";
 import { useState,useRef } from "react";
 import { useParams } from 'react-router-dom';
 import {AnimatePresence, motion} from 'framer-motion';
-
+import icebreakersData from '../icebreakers.json';
 export default function Chat(){
     const [privateRoom, setPrivateRoom] = useState(null);
 
     const [message,setMessage] = useState(null);
     const [roomId, setRoomId] = useState(null);
+    const [randomIcebreaker, setRandomIcebreaker] = useState('');
     const [mutual,setMutual] = useState([]);
     const [room, setRoom] = useState(null);
     const [messageReceived,setMessageReceived] = useState([]);
@@ -26,6 +27,12 @@ export default function Chat(){
         
         setRoom(id);
     }, [room]);
+
+    
+  const selectRandomIcebreaker = () => {
+    const randomIndex = Math.floor(Math.random() * icebreakersData.length);
+    setRandomIcebreaker(icebreakersData[randomIndex]);
+  };
 
     useEffect(() => {
         const chatPage = document.querySelector(".chats");
@@ -183,7 +190,7 @@ export default function Chat(){
         <>
 
         
-
+<div class="mainDiv" >
 		<div class="logoNavbar">
      
   <div class="logo">
@@ -191,7 +198,7 @@ export default function Chat(){
   </div>
 </div>
 
-
+<div class="banners">
 <ul class="interestsul">
     {mutual.length !== 0 && (
         <h4><span  class="interestsspan">Things you like in common :)</span></h4>
@@ -204,15 +211,32 @@ export default function Chat(){
                 )
             })}
 	   
+
         
         </ul>
-
+        <div class="iceDiv">
+          
+      <button class="iceButton" onClick={selectRandomIcebreaker}>Get Random Icebreaker</button>
+      {randomIcebreaker && (
+        <div class="iceBackground">
+         {randomIcebreaker.split(' ').map((m)=>{
+            return (
+                <p class="iceP">{m}</p>
+            )
+         })}
+        </div>
+        
+      )}</div>
+</div>
         {isLoading ? (
             <>
                 <div className="loader"></div>
                 
                 </>
             ) : (
+                <>
+                
+
 <div class="chatcontainer">
    
       <div class="msg-header">
@@ -222,7 +246,7 @@ export default function Chat(){
           
         </div>
         )}
-       
+
         
           
       </div>
@@ -281,14 +305,17 @@ export default function Chat(){
               <svg style={{ 
     width: '80%',
     position: 'relative',
-    left: '-20px'}} fill="#000000" width="800px" height="800px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M2.009,10.845a1,1,0,0,0,.849.859l8.258,1.18,1.18,8.258a1,1,0,0,0,1.909.252l7.714-18a1,1,0,0,0-1.313-1.313L2.606,9.8A1,1,0,0,0,2.009,10.845Zm11.762,6.483-.711-4.974,4.976-4.976Zm2.85-11.363-4.974,4.974-4.976-.71Z"/></svg>
+    left: '-20px',
+    height:'auto'}} fill="#000000" width="800px" height="800px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M2.009,10.845a1,1,0,0,0,.849.859l8.258,1.18,1.18,8.258a1,1,0,0,0,1.909.252l7.714-18a1,1,0,0,0-1.313-1.313L2.606,9.8A1,1,0,0,0,2.009,10.845Zm11.762,6.483-.711-4.974,4.976-4.976Zm2.85-11.363-4.974,4.974-4.976-.71Z"/></svg>
               </span>
             </div>
          
         </div>
       </div>
     </div>
+    </>
     )}
+    </div>
         </>
     )
 }
