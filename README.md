@@ -28,6 +28,8 @@ Access the application at http://localhost:3000
 
 ## Technologies Used
 Frontend: React.js, Socket.io-client, Framer Motio
+
 Backend: Node.js, Express.js, Socket.io, Google Cloud Translate API
+
 Styling: CSS, Bootstrap 
 
