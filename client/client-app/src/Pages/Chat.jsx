@@ -214,7 +214,8 @@ export default function Chat(){
 
         
         </ul>
-        <div class="iceDiv">
+{isLoading === false && (
+     <div class="iceDiv">
           
       <button class="iceButton" onClick={selectRandomIcebreaker}>Get Random Icebreaker</button>
       {randomIcebreaker && (
@@ -227,6 +228,9 @@ export default function Chat(){
         </div>
         
       )}</div>
+)}
+       
+
 </div>
         {isLoading ? (
             <>
